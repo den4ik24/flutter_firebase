@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,11 +39,16 @@ class MyApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-            )
-          )
-        )
+            ),
+          ),
+        ),
       ),
-      home: const AuthScreen(),
+      home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
+        if(userSnapshot.hasData){
+          return const ChatScreen();
+        }
+        return const AuthScreen();
+      } ,),
     );
   }
 }
