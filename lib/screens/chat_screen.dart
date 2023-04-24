@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase/widgets/chat/messages.dart';
+import 'package:flutter_firebase/widgets/chat/new_message.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -21,7 +23,10 @@ class ChatScreen extends StatelessWidget {
                 value: "logout",
                 child: Row(
                   children: const [
-                    Icon(Icons.exit_to_app, color: Colors.black,),
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.black,
+                    ),
                     SizedBox(width: 8),
                     Text("Logout"),
                   ],
@@ -36,33 +41,15 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection("chats/1MTLBSqXY0NClGdJaHBJ/messages")
-            .snapshots(),
-        builder: (ctx, streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final documents = streamSnapshot.data!.docs;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (ctx, index) => Container(
-              padding: const EdgeInsets.all(8),
-              child: Text(documents[index]["text"]),
+      body: Container(
+        child: Column(
+          children: const [
+            Expanded(
+              child: Messages(),
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection("chats/1MTLBSqXY0NClGdJaHBJ/messages")
-              .add({"text": "This was added by clicking the button!"});
-        },
+            NewMessage(),
+          ],
+        ),
       ),
     );
   }
