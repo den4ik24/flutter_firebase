@@ -22,19 +22,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'FlutterChat',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
-        colorScheme:
-            ColorScheme.fromSwatch(primarySwatch: Colors.pink).copyWith(
-          secondary: Colors.deepPurple,
-          background: Colors.pink,
-        ),
-        //accentColorBrightness: Brightness.dark,
-        // backgroundColor: Colors.pink,
-        // accentColor: Colors.deepPurple,
-        buttonTheme: ButtonTheme.of(context).copyWith(
-          buttonColor: Colors.pink,
-          textTheme: ButtonTextTheme.primary,
-        ),
+        // primarySwatch: Colors.pink,
+        // colorScheme:
+        //     ColorScheme.fromSwatch(primarySwatch: Colors.pink).copyWith(
+        //   secondary: Colors.deepPurple,
+        //   background: Colors.pink,
+        // ),
+        // buttonTheme: ButtonTheme.of(context).copyWith(
+        //   buttonColor: Colors.pink,
+        //   textTheme: ButtonTextTheme.primary,
+        // ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -42,13 +39,20 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+      ).copyWith(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 63, 17, 177)),
       ),
-      home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
-        if(userSnapshot.hasData){
-          return const ChatScreen();
-        }
-        return const AuthScreen();
-      } ,),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.hasData) {
+            return const ChatScreen();
+          }
+          return const AuthScreen();
+        },
+      ),
     );
   }
 }

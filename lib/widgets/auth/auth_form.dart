@@ -81,6 +81,8 @@ class _AuthFormState extends State<AuthForm> {
                       return null;
                     },
                     keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
                     decoration: const InputDecoration(
                       labelText: "Email address",
                     ),
