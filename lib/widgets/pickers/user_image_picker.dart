@@ -20,11 +20,15 @@ class _UserImagePickerState extends State<UserImagePicker> {
       imageQuality: 50,
       maxWidth: 150,
     );
-    final pickedImageFile = File(image!.path);
+
+    if (image == null) {
+      return;
+    }
+
     setState(() {
-      _pickedImage = pickedImageFile;
+      _pickedImage = File(image.path);
     });
-    widget.imagePickFn(pickedImageFile);
+    widget.imagePickFn(_pickedImage!);
   }
 
   @override
@@ -34,13 +38,18 @@ class _UserImagePickerState extends State<UserImagePicker> {
         CircleAvatar(
           radius: 40,
           backgroundColor: Colors.grey,
-          backgroundImage:
+          foregroundImage:
               _pickedImage != null ? FileImage(_pickedImage!) : null,
         ),
         TextButton.icon(
           onPressed: _pickImage,
           icon: const Icon(Icons.image),
-          label: const Text("Add Image"),
+          label: Text(
+            "Add Image",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
         ),
       ],
     );

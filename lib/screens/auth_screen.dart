@@ -42,7 +42,6 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-
         final ref = FirebaseStorage.instance
             .ref()
             .child("user_image")
@@ -61,15 +60,14 @@ class _AuthScreenState extends State<AuthScreen> {
           });
         });
       }
-    } on FirebaseAuthException catch (err) {
-      var message = "An error occurred, please check your credentials!";
-      if (err.message != null) {
-        message = err.message!;
+    } on FirebaseAuthException catch (error) {
+      if (error.code == "email-already-in-use") {
+        //...
       }
-
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
-          content: Text(message),
+          content: Text(error.message ?? "Authentication failed."),
           backgroundColor: Theme.of(ctx).colorScheme.error,
         ),
       );

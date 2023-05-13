@@ -37,7 +37,7 @@ class _AuthFormState extends State<AuthForm> {
 
     if (_userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar (
+        SnackBar(
           content: const Text("Please pick an image."),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
@@ -107,8 +107,8 @@ class _AuthFormState extends State<AuthForm> {
                   TextFormField(
                     key: const ValueKey("password"),
                     validator: (value) {
-                      if (value!.isEmpty || value.length < 7) {
-                        return "Password must be at least 7 characters long.";
+                      if (value!.isEmpty || value.trim().length < 6) {
+                        return "Password must be at least 6 characters long.";
                       }
                       return null;
                     },
@@ -123,6 +123,10 @@ class _AuthFormState extends State<AuthForm> {
                   if (!widget.isLoading)
                     ElevatedButton(
                       onPressed: _trySubmit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                      ),
                       child: Text(_isLogin ? "Login" : "Signup"),
                     ),
                   if (!widget.isLoading)
