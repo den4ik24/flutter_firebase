@@ -1,79 +1,111 @@
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble(this.message, this.userName, this.userImage, this.isMe,
-      {super.key});
+  const MessageBubble.first({
+    super.key,
+    required this.userImage,
+    required this.username,
+    required this.message,
+    required this.isMe,
+  }) : isFirstInSequence = true;
 
+  const MessageBubble.next({
+    super.key,
+    required this.message,
+    required this.isMe,
+  })  : isFirstInSequence = false,
+        userImage = null,
+        username = null;
+
+  final bool isFirstInSequence;
+  final String? userImage;
+  final String? username;
   final String message;
-  final String userName;
-  final String userImage;
   final bool isMe;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Stack(
-      clipBehavior: Clip.none,
       children: [
-        Row(
-          mainAxisAlignment:
-              isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: isMe
-                    ? Colors.grey[300]
-                    : Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(12),
-                  topRight: const Radius.circular(12),
-                  bottomLeft: Radius.circular(!isMe ? 0 : 12),
-                  bottomRight: Radius.circular(isMe ? 0 : 12),
-                ),
+        if (userImage != null)
+          Positioned(
+            top: 15,
+            right: isMe ? 0 : null,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(
+                userImage!,
               ),
-              width: 140,
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 16,
-              ),
-              margin: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 8,
-              ),
-              child: Column(
+              backgroundColor: theme.colorScheme.primary.withAlpha(180),
+              radius: 23,
+            ),
+          ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 46),
+          child: Row(
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              Column(
                 crossAxisAlignment:
                     isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    userName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isMe
-                          ? Colors.black
-                          : Theme.of(context).colorScheme.onSecondary,
+                  if (isFirstInSequence) const SizedBox(height: 18),
+                  if (username != null)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 13,
+                        right: 13,
+                      ),
+                      child: Text(
+                        username!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    message,
-                    style: TextStyle(
+
+                  Container(
+                    decoration: BoxDecoration(
                       color: isMe
-                          ? Colors.black
-                          : Theme.of(context).colorScheme.onSecondary,
+                          ? Colors.grey[300]
+                          : theme.colorScheme.secondary.withAlpha(200),
+                      borderRadius: BorderRadius.only(
+                        topLeft: !isMe && isFirstInSequence
+                            ? Radius.zero
+                            : const Radius.circular(12),
+                        topRight: isMe && isFirstInSequence
+                            ? Radius.zero
+                            : const Radius.circular(12),
+                        bottomLeft: const Radius.circular(12),
+                        bottomRight: const Radius.circular(12),
+                      ),
                     ),
-                    textAlign: isMe ? TextAlign.end : TextAlign.start,
+                    constraints: const BoxConstraints(maxWidth: 200),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 14,
+                    ),
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 12,
+                    ),
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                        height: 1.3,
+                        color: isMe
+                            ? Colors.black87
+                            : theme.colorScheme.onSecondary,
+                      ),
+                      softWrap: true,
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-        Positioned(
-          top: 0,
-          left: isMe ? null: 120,
-          right: isMe? 120 : null,
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(
-              userImage,
-            ),
+            ],
           ),
         ),
       ],
