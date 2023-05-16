@@ -16,7 +16,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
-  var _isLoading = false;
+  var _isLoading = false; // isAuthenticating
 
   void _submitAuthForm(
     String email,
@@ -42,15 +42,16 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-        final ref = FirebaseStorage.instance
+
+        final storageRef = FirebaseStorage.instance
             .ref()
             .child("user_image")
             .child("${authResult.user!.uid}.jpg");
 
-        ref.putFile(image).whenComplete(() async {
-          final url = await ref.getDownloadURL();
+        storageRef.putFile(image).whenComplete(() async {
+          final url = await storageRef.getDownloadURL();
 
-          FirebaseFirestore.instance
+         await FirebaseFirestore.instance
               .collection("users")
               .doc(authResult.user!.uid)
               .set({
@@ -58,7 +59,9 @@ class _AuthScreenState extends State<AuthScreen> {
             "email": email,
             "image_url": url,
           });
-        });
+       });
+        // await storageRef.putFile(image);
+        // await storageRef.getDownloadURL();
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == "email-already-in-use") {

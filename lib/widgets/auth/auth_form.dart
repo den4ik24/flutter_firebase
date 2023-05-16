@@ -35,7 +35,7 @@ class _AuthFormState extends State<AuthForm> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
-    if (_userImageFile == null && !_isLogin) {
+    if (!isValid || _userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text("Please pick an image."),
@@ -56,6 +56,7 @@ class _AuthFormState extends State<AuthForm> {
         context,
       );
     }
+    _formKey.currentState!.save();
   }
 
   @override
@@ -71,7 +72,12 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (!_isLogin) UserImagePicker(_pickedImage),
+                  if (!_isLogin)
+                    UserImagePicker(
+                      imagePickFn: (pickedImage) {
+                        _userImageFile = pickedImage;
+                      },
+                    ),
                   TextFormField(
                     key: const ValueKey("email"),
                     validator: (value) {
