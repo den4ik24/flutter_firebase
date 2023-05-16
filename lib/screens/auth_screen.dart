@@ -48,6 +48,8 @@ class _AuthScreenState extends State<AuthScreen> {
             .child("user_image")
             .child("${authResult.user!.uid}.jpg");
 
+        // await storageRef.putFile(image);
+        // await storageRef.getDownloadURL();
         storageRef.putFile(image).whenComplete(() async {
           final url = await storageRef.getDownloadURL();
 
@@ -60,8 +62,6 @@ class _AuthScreenState extends State<AuthScreen> {
             "image_url": url,
           });
        });
-        // await storageRef.putFile(image);
-        // await storageRef.getDownloadURL();
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == "email-already-in-use") {

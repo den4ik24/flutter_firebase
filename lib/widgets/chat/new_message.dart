@@ -11,44 +11,68 @@ class NewMessage extends StatefulWidget {
 
 class _NewMessageState extends State<NewMessage> {
   final _controller = TextEditingController();
-  var _enteredMessage = "";
+  //var _enteredMessage = "";
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _sendMessage() async {
+    final enteredMessage = _controller.text;
+
+    if (enteredMessage.trim().isEmpty) {
+      return;
+    }
+
     FocusScope.of(context).unfocus();
-    final user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance.collection("users").doc(user!.uid).get();
+    _controller.clear();
+    
+    final user = FirebaseAuth.instance.currentUser!;
+    final userData = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .get();
     FirebaseFirestore.instance.collection("chat").add({
-      "text": _enteredMessage,
+      "text": enteredMessage,
       "createdAt": Timestamp.now(),
       "userId": user.uid,
-      "username": userData["username"],
-      "userImage": userData["image_url"],
+      "username": userData.data()!["username"],
+      "userImage": userData.data()!["image_url"],
     });
-    _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.all(8),
+    return
+        // Container(
+        //   margin: const EdgeInsets.only(top: 8),
+        //   padding: const EdgeInsets.all(8),
+        Padding(
+      padding: const EdgeInsets.only(left: 15, right: 1, bottom: 14),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: _controller,
+              textCapitalization: TextCapitalization.sentences,
+              autocorrect: true,
+              enableSuggestions: true,
               decoration: const InputDecoration(labelText: "Send a message..."),
-              onChanged: (value) {
-                setState(() {
-                  _enteredMessage = value;
-                });
-              },
+              controller: _controller,
+              // onChanged: (value) {
+              //   setState(() {
+              //     _enteredMessage = value;
+              //   });
+              // },
             ),
           ),
           IconButton(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.send),
-            onPressed: _enteredMessage.trim().isEmpty ? null : _sendMessage,
+            onPressed:
+                // _enteredMessage.trim().isEmpty ? null : _sendMessage,
+                _sendMessage,
           ),
         ],
       ),

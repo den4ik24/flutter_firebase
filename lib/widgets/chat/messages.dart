@@ -30,18 +30,34 @@ class Messages extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              final chatDocs = chatSnapshot.data!.docs;
+
+              if (!chatSnapshot.hasData || chatSnapshot.data!.docs.isEmpty) {
+                return const Center(
+                  child: Text("No messages found"),
+                );
+              }
+
+              if (chatSnapshot.hasError) {
+                return const Center(
+                  child: Text("Something went wrong..."),
+                );
+              }
+
+              final loadedMessages = chatSnapshot.data!.docs;
+
               return ListView.builder(
-                reverse: true,
-                itemCount: chatDocs.length,
-                itemBuilder: (context, index) => MessageBubble(
-                  chatDocs[index]["text"],
-                  chatDocs[index]["username"],
-                  chatDocs[index]["userImage"],
-                  chatDocs[index]["userId"] == futureSnapshot.data!.uid,
-                  key: ValueKey(chatDocs[index].id),
-                ),
-              );
+                  reverse: true,
+                  itemCount: loadedMessages.length,
+                  itemBuilder: (context, index) {
+                    final chatMessage = loadedMessages[index].data();
+                    return MessageBubble(
+                      chatMessage["text"],
+                      chatMessage["username"],
+                      chatMessage["userImage"],
+                      chatMessage["userId"] == futureSnapshot.data!.uid,
+                      key: ValueKey(loadedMessages[index].id),
+                    );
+                  });
             });
       },
     );

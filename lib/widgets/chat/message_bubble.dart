@@ -28,10 +28,6 @@ class MessageBubble extends StatelessWidget {
                   topRight: const Radius.circular(12),
                   bottomLeft: Radius.circular(!isMe ? 0 : 12),
                   bottomRight: Radius.circular(isMe ? 0 : 12),
-                  // bottomLeft:
-                  //     !isMe ? const Radius.circular(0) : const Radius.circular(12),
-                  // bottomRight:
-                  //     isMe ? const Radius.circular(0) : const Radius.circular(12),
                 ),
               ),
               width: 140,
@@ -59,7 +55,6 @@ class MessageBubble extends StatelessWidget {
                   Text(
                     message,
                     style: TextStyle(
-                      //color: Theme.of(context).accentTextTheme.titleMedium!.color,
                       color: isMe
                           ? Colors.black
                           : Theme.of(context).colorScheme.onSecondary,

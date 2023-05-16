@@ -99,13 +99,16 @@ class _AuthFormState extends State<AuthForm> {
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey("username"),
+                      decoration: const InputDecoration(labelText: "Username"),
+                      enableSuggestions: false,
                       validator: (value) {
-                        if (value!.isEmpty || value.length < 4) {
-                          return "Please enter at least 4 characters";
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.trim().length < 4) {
+                          return "Please enter at least 4 characters.";
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: "Username"),
                       onSaved: (value) {
                         _userName = value!;
                       },
