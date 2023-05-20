@@ -10,7 +10,7 @@ class AuthForm extends StatefulWidget {
     String email,
     String password,
     String username,
-    File image,
+    File? image,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
@@ -25,7 +25,7 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = "";
   var _userName = "";
   var _userPassword = "";
-  File _userImageFile;
+  File? _userImageFile;
 
   // void _pickedImage(File image) {
   //   _userImageFile = image;

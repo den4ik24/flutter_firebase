@@ -48,18 +48,6 @@ class Messages extends StatelessWidget {
               final loadedMessages = chatSnapshot.data!.docs;
 
               return ListView.builder(
-                // reverse: true,
-                // itemCount: loadedMessages.length,
-                // itemBuilder: (context, index) {
-                //   final chatMessage = loadedMessages[index].data();
-                //   return MessageBubble(
-                //     chatMessage["text"],
-                //     chatMessage["username"],
-                //     chatMessage["userImage"],
-                //     chatMessage["userId"] == futureSnapshot.data!.uid,
-                //     key: ValueKey(loadedMessages[index].id),
-                //   );
-                // },
                 padding: const EdgeInsets.only(
                   bottom: 40,
                   left: 13,
